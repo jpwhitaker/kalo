@@ -1,4 +1,4 @@
-import {PresentationControls, OrbitControls, PerspectiveCamera, Text, Billboard, Circle, Sphere} from '@react-three/drei';
+import {PresentationControls, OrbitControls, PerspectiveCamera, Text, Billboard, Line, Sphere, Html} from '@react-three/drei';
 import { useEffect } from 'react';
 import Kalo from './Kalo.jsx';
 import { useThree } from '@react-three/fiber';
@@ -16,9 +16,9 @@ export default function Experience() {
 
 
       <ambientLight intensity={0.5} />
-      {/* <OrbitControls enablePan={true}/>
-       */}
-      <PresentationControls global snap>
+      <OrbitControls enablePan={true}/>
+      
+      {/* <PresentationControls global snap> */}
       <directionalLight
         castShadow
         position={[1, 2, 3]}
@@ -35,11 +35,18 @@ export default function Experience() {
           <meshStandardMaterial color="greenyellow" />
         </mesh>
         <Kalo scale={0.5}  position={[0, -0.5, 0]} />
-        
-        <CalloutText hawaiianName="mahae" englishTranslation="leaf sinus" position={[-3,4.3,0]} />
+        <Billboard position={[-3,4.3,0.5]}>
+        <CalloutText hawaiianName="mahae" englishTranslation="leaf sinus" position={[0,0,0]} />
+        </Billboard>
+        <Line
+          points={[[-3,4.3,0.5], [-2,3.6,0.5]]}
+          color="black"                   // Default
+          lineWidth={2}                   // In pixels (default)
+        />
+        {/* <CalloutTextHTML hawaiianName="mahae" englishTranslation="leaf sinus" position={[0,4.3,0]} /> */}
         <Sphere args={[.08,32]} position={[-2,3.6,0.5]} material-color="hotpink"/>
 
-        <CalloutText hawaiianName="'ao lū'au or mahola" englishTranslation="enexpanded, rolled leaf blade" position={[0,2.5,0]} />
+        {/* <CalloutText hawaiianName="'ao lū'au or mahola" englishTranslation="enexpanded, rolled leaf blade" position={[0,2.5,0]} />
 
         <CalloutText hawaiianName="lau or lū'au" englishTranslation="leaf" position={[-6,3.5,0]} />
         <CalloutText hawaiianName="a'a lau" englishTranslation="midrib and veins" position={[-4.4,3.5,0]} />
@@ -51,8 +58,8 @@ export default function Experience() {
         <CalloutText hawaiianName="māwae" englishTranslation="peticole sheath" position={[-2,0.6,0]} />
 
         <CalloutText hawaiianName="'ohā" englishTranslation="bud of corm" position={[0.8,0.3,0]} />
-        <CalloutText hawaiianName="huluhulu" englishTranslation="roots" position={[0.8,-0.3,0]} />
-      </PresentationControls>
+        <CalloutText hawaiianName="huluhulu" englishTranslation="roots" position={[0.8,-0.3,0]} /> */}
+      {/* </PresentationControls> */}
     </>
   );
 }
@@ -83,4 +90,16 @@ const CalloutText = ({ hawaiianName, englishTranslation, position }) => {
       </Text>
     </>
   );
+};const CalloutTextHTML = ({ hawaiianName, englishTranslation, position }) => {
+  return (
+    <>
+      <Html scale={1} rotation={[0, 0, 0]} position={[3, 0, 0]} transform occlude="blending">
+        <div className="annotation">
+          6.550 $ <span style={{ fontSize: '1.5em' }}>🥲</span>
+        </div>
+      </Html>
+    </>
+  );
 };
+
+
