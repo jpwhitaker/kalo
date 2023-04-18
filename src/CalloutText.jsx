@@ -10,7 +10,9 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
   const [textRendered, setTextRendered] = useState({hawaiian: false, english: false});
   
   return (
+    <>
     <group ref={groupRef} position={position}>
+      <Billboard>
       <Text
         color="black"
         anchorX="left"
@@ -44,9 +46,11 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
       >
         ({englishTranslation})
       </Text>
-      {(textRendered.hawaiian && textRendered.english) && <Midpoints groupRef={groupRef}/>}
-      {(textRendered.hawaiian && textRendered.english) && <CalloutLine groupRef={groupRef} endPosition={[2,-0.8,0.5]}/>}
+      </Billboard>
     </group>
+    {(textRendered.hawaiian && textRendered.english) && <Midpoints groupRef={groupRef}/>}
+    {(textRendered.hawaiian && textRendered.english) && <CalloutLine groupRef={groupRef} endPosition={[-1.98,3.4,0.5]}/>}
+    </>
   );
 };
 
@@ -58,8 +62,8 @@ const CalloutLine = ({groupRef, endPosition}) => {
   const center = new Vector3();
   bounds.getSize(size);
   bounds.getCenter(center);
-  const positionX = (size.x)
-  const positionY = 0 - (size.y / 2);
+  const positionX = (groupRef.current.position.x + size.x)
+  const positionY = groupRef.current.position.y - (size.y / 2);
   return (
     <Line
       points={[[positionX,positionY,0], endPosition]}
@@ -83,9 +87,9 @@ const Midpoints = ({groupRef}) => {
   return (
     <>
     
-    {/* <Box args={[size.x, size.y, size.z]} position={[positionX,positionY,-0.05]}>
+    <Box args={[size.x, size.y, size.z]} position={[groupRef.current.position.x + positionX, groupRef.current.position.y + positionY,-0.05]}>
       <Wireframe/>
-    </Box> */}
+    </Box>
     </>
   )
 }
