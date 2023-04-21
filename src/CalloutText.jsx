@@ -2,7 +2,7 @@ import { Text, Plane, Billboard, Line, Mask, useMask } from '@react-three/drei';
 import { useState, useEffect, useRef } from 'react';
 import { Box3, Vector3 } from 'three';
 
-export default function CalloutText({ hawaiianName, englishTranslation, position }) {
+export default function CalloutText({ hawaiianName, englishTranslation, labelPosition, endPosition, maskNo}) {
   const groupRef = useRef();
   const englishRef = useRef();
   const hawaiianRef = useRef();
@@ -30,7 +30,7 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
 
   return (
     <>
-      <Billboard ref={groupRef} position={position}>
+      <Billboard ref={groupRef} position={labelPosition}>
         <group>
           <Text
             ref={hawaiianRef}
@@ -67,19 +67,19 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
           >
             ({englishTranslation})
           </Text>
-          <Mask id={1} position={[0, 0, 0]} scale={1.2}>
+          <Mask id={maskNo} position={[0, 0, 0]} scale={1.2}>
             <planeGeometry args={[planeSize.width, planeSize.height]} scale={1.2}/>
           </Mask>
         </group>
       </Billboard>
 
-      {(textRendered.hawaiian && textRendered.english) && <CalloutLine groupRef={groupRef} endPosition={[-1.98, 3.4, 0.5]} />}
+      {(textRendered.hawaiian && textRendered.english) && <CalloutLine groupRef={groupRef} endPosition={endPosition} maskNo={maskNo} />}
     </>
   );
 };
 
-const CalloutLine = ({ groupRef, endPosition }) => {
-  const stencil = useMask(1, true)
+const CalloutLine = ({ groupRef, endPosition, maskNo }) => {
+  const stencil = useMask(maskNo, true)
   const bounds = new Box3().setFromObject(groupRef.current)
   const size = new Vector3();
   const center = new Vector3();

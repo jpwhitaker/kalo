@@ -41,7 +41,10 @@ export default function Experience() {
         </mesh>
         <Kalo scale={0.5}  position={[0, -0.5, 0]} />
         
-        <CalloutText hawaiianName="mahae" englishTranslation="leaf sinus" position={[-4,4.2,0]} />
+        <CalloutText hawaiianName="mahae" englishTranslation="leaf sinus" labelPosition={[-4,4.2,0]} endPosition={[-1.98, 3.4, 0.5]} maskNo={1}/>
+        <CalloutText hawaiianName="a'a lau" englishTranslation="midrib and veins" labelPosition={[-4,3.5,0]} endPosition={[-2.1, 3.1, 0.52]} maskNo={2}/>
+        <CalloutText hawaiianName="piko" englishTranslation="junction of peticole and blade on upper surface" labelPosition={[-4,2.7,0]} endPosition={[-2, 2.9, 0.69]} maskNo={3}/>
+        <CalloutText hawaiianName="ka'e lau" englishTranslation="edge of leaf" labelPosition={[-4,1.9,0]} endPosition={[-2.68, 2, 0.40]} maskNo={4}/>
     </>
   );
 }
