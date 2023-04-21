@@ -1,8 +1,10 @@
 import { Text, Plane, Billboard, Box, Wireframe, useHelper, Line, Sphere, Mask, useMask } from '@react-three/drei';
 import { useState, useEffect, useRef } from 'react';
-import { Box3, Box3Helper, Vector3, BufferGeometry } from 'three';
+import { Box3, Box3Helper, Vector3, BufferGeometry, LineBasicMaterial } from 'three';
 
 // might have to get midpoint of billboard in a useFrame and update the lineStart to always have it point to the right area.
+
+//thinking stencil is not working because things are shifting in useEffect
 
 export default function CalloutText({ hawaiianName, englishTranslation, position }) {
   const groupRef = useRef();
@@ -32,9 +34,7 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
 
   return (
     <>
-      <Mask id={1}>
-        <sphereGeometry args={[0.8, 64, 64]} />
-      </Mask>
+
       <Billboard ref={groupRef} position={position}>
         <group>
           <Text
@@ -72,9 +72,9 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
           >
             ({englishTranslation})
           </Text>
-          <Plane args={[planeSize.width, planeSize.height, 1]} position={[0, 0, -0.05]} scale={1.5}>
+          {/* <Plane args={[planeSize.width, planeSize.height, 1]} position={[0, 0, -0.05]} scale={1.5}>
             <meshBasicMaterial color="#ffffff" transparent opacity={1} />
-          </Plane>
+          </Plane> */}
         </group>
       </Billboard>
 
@@ -84,8 +84,7 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
 };
 
 const CalloutLine = ({groupRef, endPosition}) => {
-  console.log('line')
-  const stencil = useMask(1, false)
+  const stencil = useMask(1, true)
   const bounds = new Box3().setFromObject(groupRef.current)
   const size = new Vector3();
   const center = new Vector3();
@@ -93,14 +92,24 @@ const CalloutLine = ({groupRef, endPosition}) => {
   bounds.getCenter(center);
   const positionX = (groupRef.current.position.x)
   const positionY = groupRef.current.position.y ;
+  // debugger
   return (
-    <Line
-      points={[[positionX,positionY,0], endPosition]}
-      lineWidth={2}                   // In pixels (default)
-      
-    >
-      <lineBasicMaterial color="pink" {...stencil} />
-    </Line>
+    <>
+    <Mask id={1} position={[positionX,positionY,0]}>
+    {/* <Sphere args={[0.8, 64, 64]} position={[positionX,positionY,0]} >
+      <meshStandardMaterial
+        color="hotpink"
+        
+      />
+    </Sphere> */}
+    <sphereGeometry args={[0.4, 64, 64]} />
+  </Mask>
+      <Line
+        points={[[positionX,positionY,0], endPosition]}
+        lineWidth={2}                   // In pixels (default)
+        {...stencil}
+      />
+      </>
   )
 }
 
