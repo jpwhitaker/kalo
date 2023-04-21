@@ -1,10 +1,6 @@
-import { Text, Plane, Billboard, Box, Wireframe, useHelper, Line, Sphere, Mask, useMask } from '@react-three/drei';
+import { Text, Plane, Billboard, Line, Mask, useMask } from '@react-three/drei';
 import { useState, useEffect, useRef } from 'react';
-import { Box3, Box3Helper, Vector3, BufferGeometry, LineBasicMaterial } from 'three';
-
-// might have to get midpoint of billboard in a useFrame and update the lineStart to always have it point to the right area.
-
-//thinking stencil is not working because things are shifting in useEffect
+import { Box3, Vector3 } from 'three';
 
 export default function CalloutText({ hawaiianName, englishTranslation, position }) {
   const groupRef = useRef();
@@ -34,7 +30,6 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
 
   return (
     <>
-
       <Billboard ref={groupRef} position={position}>
         <group>
           <Text
@@ -72,9 +67,9 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
           >
             ({englishTranslation})
           </Text>
-          {/* <Plane args={[planeSize.width, planeSize.height, 1]} position={[0, 0, -0.05]} scale={1.5}>
-            <meshBasicMaterial color="#ffffff" transparent opacity={1} />
-          </Plane> */}
+          <Mask id={1} position={[0, 0, 0]} scale={1.2}>
+            <planeGeometry args={[planeSize.width, planeSize.height]} scale={1.2}/>
+          </Mask>
         </group>
       </Billboard>
 
@@ -83,7 +78,7 @@ export default function CalloutText({ hawaiianName, englishTranslation, position
   );
 };
 
-const CalloutLine = ({groupRef, endPosition}) => {
+const CalloutLine = ({ groupRef, endPosition }) => {
   const stencil = useMask(1, true)
   const bounds = new Box3().setFromObject(groupRef.current)
   const size = new Vector3();
@@ -91,73 +86,19 @@ const CalloutLine = ({groupRef, endPosition}) => {
   bounds.getSize(size);
   bounds.getCenter(center);
   const positionX = (groupRef.current.position.x)
-  const positionY = groupRef.current.position.y ;
-  // debugger
+  const positionY = groupRef.current.position.y;
+
   return (
     <>
-    <Mask id={1} position={[positionX,positionY,0]}>
-    {/* <Sphere args={[0.8, 64, 64]} position={[positionX,positionY,0]} >
-      <meshStandardMaterial
-        color="hotpink"
-        
-      />
-    </Sphere> */}
-    <sphereGeometry args={[0.4, 64, 64]} />
-  </Mask>
       <Line
-        points={[[positionX,positionY,0], endPosition]}
-        lineWidth={2}                   // In pixels (default)
+        points={[[positionX, positionY, 0], endPosition]}
+        lineWidth={2}
         {...stencil}
       />
-      </>
-  )
-}
-
-// const CalloutLine = ({groupRef, endPosition}) => {
-//   console.log('line')
-//   const stencil = useMask(1)
-//   const bounds = new Box3().setFromObject(groupRef.current)
-//   const size = new Vector3();
-//   const center = new Vector3();
-//   bounds.getSize(size);
-//   bounds.getCenter(center);
-//   const positionX = (groupRef.current.position.x)
-//   const positionY = groupRef.current.position.y ;
-//   const geometry = new BufferGeometry().setFromPoints([
-//     [positionX, positionY, 0],
-//     endPosition,
-//   ]);
-//   return (
-//     <line
-//       points={[[positionX,positionY,0], endPosition]}
-//     >
-//       <lineBasicMaterial attach="material" color="black" />
-//     </line>
-//   )
-// }
-
-
-
-const Midpoints = ({groupRef}) => {
-  console.log('midpoints')
-  const bounds = new Box3().setFromObject(groupRef.current)
-  const helper = new Box3Helper(bounds, 0xffff00)
-  const size = new Vector3();
-  const center = new Vector3();
-  bounds.getSize(size);
-  bounds.getCenter(center);
-  const positionX = (size.x / 2);
-  const positionY = 0 - (size.y / 2);
-  return (
-    <>
-    
-    <Box args={[size.x, size.y, size.z]} position={[groupRef.current.position.x , groupRef.current.position.y ,-0.05]}>
-      <Wireframe/>
-      <meshPhongMaterial color="#ffffff" opacity={1} transparent />
-
-    </Box>
     </>
   )
 }
+
+
 
 
